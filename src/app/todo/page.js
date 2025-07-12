@@ -193,164 +193,150 @@ export default function TodoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-gray-50 p-6 sm:p-8 rounded-xl shadow-lg space-y-8">
+    <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+      <div className="max-w-4xl mx-auto bg-gray-50 p-4 sm:p-8 rounded-xl shadow-lg space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center sm:text-left">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-900 text-center sm:text-left">
             Todo Dashboard
           </h2>
-          <Button
-            variant="outline"
-            onClick={handleSignOut}
-            className="text-gray-900 hover:text-black border-gray-300 hover:border-black py-2 px-4 rounded-lg shadow-sm hover:shadow-md transition duration-200"
-          >
-            <LogOut className="mr-2" size={20} /> Sign Out
-          </Button>
+          {/* The following div contains the Sign Out button and will be removed */}
+          {/*
+          <div className="flex-shrink-0">
+            <button
+              onClick={handleSignOut}
+              className="flex items-center px-4 py-2 bg-white text-gray-900 rounded-md shadow-sm hover:bg-gray-100 transition duration-200 text-sm font-medium"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
+            </button>
+          </div>
+          */}
         </div>
+
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {message && <p className="text-green-500 text-center">{message}</p>}
 
         <form
           onSubmit={editingId ? handleUpdate : handleAdd}
-          className="space-y-6 mb-8 p-6 bg-white rounded-lg shadow-inner border border-gray-100"
+          className="space-y-4"
         >
-          <div>
-            <label
-              htmlFor="title"
-              className="block text-base font-semibold text-gray-800 mb-2"
-            >
-              Title
-            </label>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <Input
-                id="title"
-                name="title"
-                placeholder="Enter todo title..."
-                value={form.title}
-                onChange={handleChange}
-                required
-                className="flex-grow border-gray-300 focus:border-gray-900 focus:ring-gray-900 text-base"
-              />
-              <MicInput onResult={(text) => handleMicResult(text, "title")} />
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex-grow w-full">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Title
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <Input
+                  type="text"
+                  name="title"
+                  id="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="Enter todo title..."
+                  className="flex-grow block w-full rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                <MicInput onResult={(text) => handleMicResult(text, "title")} />
+              </div>
             </div>
           </div>
+
           <div>
             <label
               htmlFor="description"
-              className="block text-base font-semibold text-gray-800 mb-2"
+              className="block text-sm font-medium text-gray-700"
             >
               Description
             </label>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="mt-1 flex rounded-md shadow-sm">
               <Input
-                id="description"
+                type="text"
                 name="description"
-                placeholder="Enter todo description..."
+                id="description"
                 value={form.description}
                 onChange={handleChange}
-                required
-                className="flex-grow border-gray-300 focus:border-gray-900 focus:ring-gray-900 text-base"
+                placeholder="Enter todo description..."
+                className="flex-grow block w-full rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
               <MicInput
                 onResult={(text) => handleMicResult(text, "description")}
               />
             </div>
           </div>
+
           <Button
             type="submit"
-            className="w-full py-3 text-lg font-semibold rounded-lg shadow-md transition duration-200 transform hover:scale-[1.005] bg-gray-900 text-white hover:bg-black"
+            className="w-full bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md shadow-sm"
+            disabled={loading}
           >
-            {editingId ? (
-              "Update Todo"
-            ) : (
-              <>
-                <Plus size={20} className="mr-2" /> Add Todo
-              </>
-            )}
+            <Plus className="mr-2 h-5 w-5" />
+            {editingId ? "Update Todo" : "Add Todo"}
           </Button>
         </form>
 
-        {error && (
-          <div className="text-red-600 text-center mb-6 p-3 bg-gray-100 rounded-lg border border-gray-300 text-base shadow-sm">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="text-green-600 text-center mb-6 p-3 bg-green-100 rounded-lg border border-green-300 text-base shadow-sm">
-            {message}
-          </div>
-        )}
-
-        {loading ? (
-          <div className="text-center text-gray-500 py-10 text-lg font-medium">
-            Loading Todos...
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {todos.length === 0 && (
-              <div className="flex flex-col items-center justify-center text-center text-gray-500 py-10 bg-gray-50 rounded-lg border border-gray-200 shadow-inner">
-                <p className="mb-3 text-lg">
-                  No tasks yet! Start by adding your first todo.
-                </p>
-                <Speaker text="No tasks yet! Start by adding your first todo." />
-              </div>
-            )}
-            {todos.map((todo) => (
-              <Card
-                key={todo._id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-100"
-              >
-                <div className="flex items-start flex-grow mb-3 sm:mb-0">
-                  <input
-                    type="checkbox"
-                    checked={todo.isCompleted}
-                    onChange={() =>
-                      handleToggleComplete(todo._id, todo.isCompleted)
-                    }
-                    className="mr-4 mt-1 h-6 w-6 text-gray-900 border-gray-300 rounded focus:ring-gray-900 focus:ring-2 transform scale-105 transition duration-150 ease-in-out cursor-pointer"
-                  />
-                  <div
-                    className={`flex-grow ${
-                      todo.isCompleted
-                        ? "line-through text-gray-500"
-                        : "text-gray-900"
+        <div className="space-y-4">
+          {loading && <p className="text-center">Loading todos...</p>}
+          {!loading && todos.length === 0 && (
+            <p className="text-center text-gray-500">No todos yet.</p>
+          )}
+          {todos.map((todo) => (
+            <Card
+              key={todo._id}
+              className="flex items-center justify-between p-4 shadow-md rounded-lg"
+            >
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={todo.isCompleted}
+                  onChange={() =>
+                    handleToggleComplete(todo._id, todo.isCompleted)
+                  }
+                  className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
+                />
+                <div className="ml-3">
+                  <h3
+                    className={`text-lg font-semibold ${
+                      todo.isCompleted ? "line-through text-gray-500" : ""
                     }`}
                   >
-                    <div className="font-semibold text-xl flex items-center mb-1">
-                      {todo.title}
-                      <Speaker
-                        text={`${todo.title}. ${todo.description}`}
-                        className="ml-2 text-gray-900 hover:text-gray-700 transition-colors duration-200"
-                      />
-                    </div>
-                    <div className="text-gray-700 text-base leading-relaxed">
-                      {todo.description}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-2">
-                      Created: {new Date(todo.createdAt).toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-2 mt-4 sm:mt-0 sm:ml-4 flex-shrink-0">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => handleEdit(todo)}
-                    className="text-gray-900 hover:bg-gray-100 hover:text-gray-700 rounded-full transition duration-200"
+                    {todo.title}
+                  </h3>
+                  <p
+                    className={`text-sm text-gray-600 ${
+                      todo.isCompleted ? "line-through" : ""
+                    }`}
                   >
-                    <Edit size={18} />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => handleDelete(todo._id)}
-                    className="text-gray-900 hover:bg-gray-100 hover:text-gray-700 rounded-full transition duration-200"
-                  >
-                    <Trash2 size={18} />
-                  </Button>
+                    {todo.description}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Created: {new Date(todo.createdAt).toLocaleString()}
+                  </p>
                 </div>
-              </Card>
-            ))}
-          </div>
-        )}
+              </div>
+              <div className="flex items-center space-x-2">
+                <Speaker text={todo.title + ". " + todo.description} />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleEdit(todo)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <Edit className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDelete(todo._id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

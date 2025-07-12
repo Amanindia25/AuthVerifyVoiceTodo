@@ -34,7 +34,7 @@ export default function MicInput({ onResult }) {
     <button
       type="button"
       onClick={handleMicClick}
-      className={`ml-2 p-2 rounded-full border
+      className={`ml-1 p-2 rounded-full border
         ${
           listening
             ? "bg-gray-900 text-white shadow-lg ring-2 ring-gray-600"

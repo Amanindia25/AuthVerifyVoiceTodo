@@ -21,12 +21,12 @@ export default function Speaker({ text }) {
     <button
       type="button"
       onClick={handleSpeak}
-      className={`ml-2 p-2 rounded-full border ${
+      className={`ml-1 p-2 rounded-full border ${
         speaking ? "bg-blue-100" : "bg-gray-100"
       } transition`}
       title="Listen"
     >
-      {speaking ? <VolumeX size={20} /> : <Volume2 size={20} />}
+      {speaking ? <Volume2 size={20} /> : <VolumeX size={20} />}
     </button>
   );
 }
